@@ -19,11 +19,12 @@ export default function Home() {
       <Navbar />
 
       {/* Centering Content */}
-      <div className="flex flex-col items-center flex-grow">
-        <div className="text-4xl font-bold mt-24">Hunting Coder</div>
+      <div className="flex flex-col items-center flex-grow bg-gray-600">
+        <div className="text-5xl font-bold mt-24">Hunting Coder</div>
         <div className=" mt-10 mb-20">A blog for hunting coders by hunting coder</div>
         <div className="blogs">
           <div className="blogItem">
+            <div className="popular text-2xl mb-2 font-semibold">Popular blogs</div>
             <h1 className="text-3xl font-bold">How to learn next in 2025?</h1>
             <p className="mb-5">Next is a framework built over react</p>
             <h1 className="text-3xl font-bold">How to learn next in 2025?</h1>

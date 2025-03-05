@@ -1,5 +1,6 @@
 import Navbar from "@/components/Navbar";
 import Head from "next/head";
+import Image from "next/image";
 
 export const metadata = {
   title: "Hunting coder",
@@ -21,6 +22,7 @@ export default function Home() {
       {/* Centering Content */}
       <div className="flex flex-col items-center flex-grow bg-gray-600">
         <div className="text-5xl font-bold mt-24">Hunting Coder</div>
+        <Image src={"/coder.jpg"} alt="Coder" width={400} height={400} className="mt-10" />
         <div className=" mt-10 mb-20">A blog for hunting coders by hunting coder</div>
         <div className="blogs">
           <div className="blogItem">

@@ -26,7 +26,7 @@ export default function Home() {
         <div className=" mt-10 mb-20">A blog for hunting coders by hunting coder</div>
         <div className="blogs">
           <div className="blogItem">
-            <div className="popular text-2xl mb-2 font-semibold">Popular blogs</div>
+            <div className="popular text-2xl mb-2 font-semibold">Latest blogs</div>
             <h1 className="text-3xl font-bold">How to learn next in 2025?</h1>
             <p className="mb-5">Next is a framework built over react</p>
             <h1 className="text-3xl font-bold">How to learn next in 2025?</h1>

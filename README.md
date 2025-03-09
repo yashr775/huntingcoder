@@ -1,1 +1,3 @@
-My First nextjs project
+Hunting Coder
+
+A blogging website for coders

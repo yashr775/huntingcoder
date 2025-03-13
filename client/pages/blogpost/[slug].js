@@ -31,7 +31,7 @@ const Slug = () => {
 
     return (
         <div className="flex flex-col items-center">
-            <h1 className="font-bold text-3xl mt-10">Title: {data.title}</h1>
+            <h1 className="font-bold text-3xl mt-10">{data.title}</h1>
             <div className="max-w-3/4 mt-10 text-lg">{data.content}</div>
         </div>
     );

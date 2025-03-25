@@ -22,3 +22,7 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.btn {
+@apply   w-28 h-8 p-1 text-center  bg-black hover:bg-blue-800  cursor-pointer rounded-xl;
+}

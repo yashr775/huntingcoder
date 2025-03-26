@@ -1,31 +1,60 @@
-import React from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import Link from "next/link";
 
-const Blog = ({ parsedBlogs }) => {
-    // useEffect(() => {
-    //     const fetchBlogs = async () => {
-    //             try {
-    //                 const res = await fetch("http://localhost:3000/api/blogs");
-    //                 const data = await res.json();
+const Blog = () => {
+    const [blogs, setBlogs] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [page, setPage] = useState(1);
+    const [hasMore, setHasMore] = useState(true);
+    const loaderRef = useRef(null);
 
-    //                 // Ensure content is parsed from JSON string to object
-    //                 const parsedBlogs = data.map((blog) => ({
-    //                     fileName: blog.fileName,
-    //                     content: JSON.parse(blog.content), // ✅ Parse JSON
-    //                 }));
+    // ✅ Fetch Blogs with Pagination
+    const fetchBlogs = useCallback(async () => {
+        if (loading || !hasMore) return; // Prevent unnecessary calls
 
-    //                 setBlogs(parsedBlogs);
-    //             } catch (err) {
-    //                 console.error("Error fetching blogs:", err);
-    //             }
-    //         };
+        setLoading(true);
+        try {
+            const res = await fetch(`http://localhost:3000/api/blogs?page=${page}`);
+            const data = await res.json();
 
-    //         fetchBlogs();
-    //     }, []);
+            const newBlogs = data.blogs.map((blog) => ({
+                fileName: blog.fileName,
+                content: JSON.parse(blog.content),
+            }));
+
+            setBlogs((prev) => [...prev, ...newBlogs]);
+            setHasMore(data.hasMore);
+            setPage((prev) => prev + 1);
+        } catch (err) {
+            console.error("Error fetching blogs:", err);
+        }
+        setLoading(false);
+    }, [loading, hasMore, page]);
+
+    // ✅ Infinite Scroll with IntersectionObserver
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (entries[0].isIntersecting) {
+                    fetchBlogs();
+                }
+            },
+            { threshold: 1.0 }
+        );
+
+        if (loaderRef.current) {
+            observer.observe(loaderRef.current);
+        }
+
+        return () => {
+            if (loaderRef.current) observer.unobserve(loaderRef.current);
+        };
+    }, [fetchBlogs]);
+
     return (
         <div className="blog-container flex justify-center min-h-screen bg-gray-900 text-white">
             <div className="blogs flex flex-col items-center mt-20 w-full max-w-2xl p-6">
-                {parsedBlogs.map((blog, index) => (
+                {blogs.map((blog, index) => (
                     <div key={blog.fileName || index} className="mb-5">
                         <h1 className="text-3xl font-bold mb-2">
                             <Link href={`/blogpost/${blog.fileName.replace(".json", "")}`}>
@@ -35,23 +64,15 @@ const Blog = ({ parsedBlogs }) => {
                         <p className="mb-5">{blog.content.content.substr(0, 100)}...</p>
                     </div>
                 ))}
+
+                {/* Loader Element (Used for Infinite Scroll Detection) */}
+                <div ref={loaderRef} className="mt-5">
+                    {loading && <p className="text-blue-600">Loading more blogs...</p>}
+                    {!hasMore && <p className="text-gray-400">No more blogs available.</p>}
+                </div>
             </div>
         </div>
     );
 };
-
-export async function getServerSideProps() {
-    let res = await fetch("http://localhost:3000/api/blogs");
-    let data = await res.json();
-
-    const parsedBlogs = data.map((blog) => ({
-        fileName: blog.fileName,
-        content: JSON.parse(blog.content), // ✅ Parse JSON
-    }));
-
-    return {
-        props: { parsedBlogs },
-    };
-}
 
 export default Blog;
